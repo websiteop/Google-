@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:white;
+    overflow:hidden;
+}
+
+/* Google Logo */
+.logo{
+    text-align:center;
+    font-size:48px;
+    font-weight:bold;
+    margin-top:120px;
+}
+
+.logo span:nth-child(1){color:#4285F4;}
+.logo span:nth-child(2){color:#EA4335;}
+.logo span:nth-child(3){color:#FBBC05;}
+.logo span:nth-child(4){color:#4285F4;}
+.logo span:nth-child(5){color:#34A853;}
+.logo span:nth-child(6){color:#EA4335;}
+
+.search-box{
+    display:block;
+    margin:30px auto;
+    width:85%;
+    padding:15px;
+    border-radius:30px;
+    border:1px solid #ccc;
+    font-size:18px;
+}
+
+/* Realme Keyboard */
+.keyboard{
+    position:fixed;
+    bottom:-400px;
+    width:100%;
+    background:linear-gradient(to top,#dfe3ea,#f5f7fa);
+    padding:10px 5px 15px 5px;
+    box-shadow:0 -8px 20px rgba(0,0,0,0.25);
+    transition:0.6s ease;
+}
+
+.keyboard.show{
+    bottom:0;
+}
+
+.key-row{
+    display:flex;
+    justify-content:center;
+    margin:6px 0;
+}
+
+.key{
+    background:white;
+    min-width:32px;
+    padding:12px 10px;
+    margin:4px;
+    border-radius:10px;
+    font-size:15px;
+    text-align:center;
+    box-shadow:0 3px 5px rgba(0,0,0,0.15);
+    transition:0.08s;
+}
+
+.key.wide{
+    min-width:70px;
+}
+
+.key.space{
+    min-width:160px;
+}
+
+.key.active{
+    transform:scale(0.9);
+    background:#d0d5dd;
+}
+
+/* Loading Screen */
+.loading-screen{
+    display:none;
+    text-align:center;
+    margin-top:100px;
+}
+
+.google-logo{
+    font-size:40px;
+    font-weight:bold;
+}
+
+.google-logo span:nth-child(1){color:#4285F4;}
+.google-logo span:nth-child(2){color:#EA4335;}
+.google-logo span:nth-child(3){color:#FBBC05;}
+.google-logo span:nth-child(4){color:#4285F4;}
+.google-logo span:nth-child(5){color:#34A853;}
+.google-logo span:nth-child(6){color:#EA4335;}
+
+.skeleton{
+    width:250px;
+    height:200px;
+    background:linear-gradient(90deg,#eee 25%,#ddd 50%,#eee 75%);
+    background-size:200% 100%;
+    animation:shimmer 1.2s infinite;
+    margin:40px auto;
+    border-radius:10px;
+}
+
+@keyframes shimmer{
+    0%{background-position:-200% 0;}
+    100%{background-position:200% 0;}
+}
+
+.result{
+    display:none;
+    text-align:center;
+    margin-top:80px;
+}
+
+.result img{
+    width:250px;
+    border-radius:10px;
+    opacity:0;
+    animation:fadeIn 1s forwards;
+}
+
+@keyframes fadeIn{
+    to{opacity:1;}
+}
+
+.result p{
+    font-size:20px;
+    margin-top:15px;
+    opacity:0;
+    animation:fadeIn 1s forwards;
+    animation-delay:0.5s;
+}
+</style>
+</head>
+
+<body>
+
+<div class="logo" id="googleLogo">
+<span>G</span><span>o</span><span>o</span>
+<span>g</span><span>l</span><span>e</span>
+</div>
+
+<input type="text" id="search" class="search-box" readonly>
+
+<!-- FULL QWERTY KEYBOARD -->
+<div class="keyboard" id="keyboard">
+
+<div class="key-row">
+<div class="key">Q</div><div class="key">W</div><div class="key">E</div>
+<div class="key">R</div><div class="key">T</div><div class="key">Y</div>
+<div class="key">U</div><div class="key">I</div><div class="key">O</div>
+<div class="key">P</div>
+</div>
+
+<div class="key-row">
+<div class="key">A</div><div class="key">S</div><div class="key">D</div>
+<div class="key">F</div><div class="key">G</div><div class="key">H</div>
+<div class="key">J</div><div class="key">K</div><div class="key">L</div>
+</div>
+
+<div class="key-row">
+<div class="key">Z</div><div class="key">X</div><div class="key">C</div>
+<div class="key">V</div><div class="key">B</div><div class="key">N</div>
+<div class="key">M</div>
+</div>
+
+<div class="key-row">
+<div class="key wide">⌫</div>
+<div class="key space">SPACE</div>
+<div class="key wide">↵</div>
+</div>
+
+</div>
+
+<div class="loading-screen" id="loading">
+<div class="google-logo">
+<span>G</span><span>o</span><span>o</span>
+<span>g</span><span>l</span><span>e</span>
+</div>
+<div class="skeleton"></div>
+</div>
+
+<div class="result" id="result">
+<img src="image.png">
+<p>KIU RE MADERCOD</p>
+</div>
+
+<script>
+let text="KIU RE MADERCOD";
+let i=0;
+let input=document.getElementById("search");
+let keyboard=document.getElementById("keyboard");
+
+setTimeout(()=>{
+    keyboard.classList.add("show");
+    autoType();
+},2000);
+
+function autoType(){
+    if(i<text.length){
+        input.value+=text.charAt(i);
+        animateKey(text.charAt(i));
+        i++;
+        setTimeout(autoType,120);
+    } else {
+        setTimeout(showLoading,1000);
+    }
+}
+
+function animateKey(letter){
+    let keys=document.querySelectorAll(".key");
+    keys.forEach(key=>{
+        if(key.innerText===letter){
+            key.classList.add("active");
+            setTimeout(()=>key.classList.remove("active"),100);
+        }
+    });
+}
+
+function showLoading(){
+    document.getElementById("googleLogo").style.display="none";
+    input.style.display="none";
+    keyboard.style.display="none";
+    document.getElementById("loading").style.display="block";
+
+    setTimeout(()=>{
+        document.getElementById("loading").style.display="none";
+        document.getElementById("result").style.display="block";
+    },2000);
+}
+</script>
+
+</body>
+</html>
